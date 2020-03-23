@@ -14,26 +14,26 @@ const isVideo = filename =>
 
 const isDirectory = dirname => fs.statSync(dirname).isDirectory();
 
-const getAllVideos = startDirname => {
+const getAllFiles = startDirname => {
   if (isDirectory(startDirname)) {
     const filelist = fs.readdirSync(startDirname);
 
     return flattenDeep(
-      filelist
-        .map(fileOrDir => {
-          const newFileOrDir = join2(startDirname, fileOrDir);
-          if (isDirectory(newFileOrDir)) {
-            return getAllVideos(newFileOrDir);
-          }
+      filelist.map(fileOrDir => {
+        const newFileOrDir = join2(startDirname, fileOrDir);
+        if (isDirectory(newFileOrDir)) {
+          return getAllFiles(newFileOrDir);
+        }
 
-          return isVideo(newFileOrDir) ? newFileOrDir : null;
-        })
-        .filter(a => a)
+        return newFileOrDir;
+      })
     );
   }
 
-  return [startDirname].filter(isVideo);
+  return [startDirname];
 };
+
+const getAllVideos = startDirname => getAllFiles(startDirname).filter(isVideo);
 
 const getUnconvertedVideos = startDirname => {
   const videos = getAllVideos(startDirname);
@@ -47,4 +47,25 @@ const getUnconvertedVideos = startDirname => {
 
 // console.log(spawnSync("ls", ["-l"]));
 
-console.log(JSON.stringify(getUnconvertedVideos("/home/nickng/gits/encode-for-chromecast/")));
+console.log(getUnconvertedVideos("/home/nickng/gits/encode-for-chromecast/"));
+
+//ffmpeg -i test-videos/Agatha.Christie\'s.Poirot.S01E01.1080p.Bluray.2.0.x265-LION\[UTR\].mkv -c:v libx264 -q:v 30 -vf scale=-2:720 -c:a copy test-videos/Agatha.Christie\'s.Poirot.S01E01.1080p.Bluray.2.0.x265-LION\[UTR\].cc.mp4
+
+const ffmpeg = spawnSync("ffmpeg", [
+  "-y",
+  "-i",
+  "test-videos/Agatha.Christie's.Poirot.S01E01.1080p.Bluray.2.0.x265-LION[UTR].mkv",
+  "-c:v",
+  "libx264",
+  "-q:v",
+  "30",
+  "-vf",
+  "scale=-2:720",
+  "-preset",
+  "veryfast",
+  "-c:a",
+  "copy",
+  "test-videos/Agatha.Christie's.Poirot.S01E01.1080p.Bluray.2.0.x265-LION[UTR].a.mp4"
+]);
+
+console.log("ffmpeg", ffmpeg);
