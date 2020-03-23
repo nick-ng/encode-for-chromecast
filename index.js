@@ -52,9 +52,11 @@ console.log(getUnconvertedVideos("/home/nickng/gits/encode-for-chromecast/"));
 //ffmpeg -i test-videos/Agatha.Christie\'s.Poirot.S01E01.1080p.Bluray.2.0.x265-LION\[UTR\].mkv -c:v libx264 -q:v 30 -vf scale=-2:720 -c:a copy test-videos/Agatha.Christie\'s.Poirot.S01E01.1080p.Bluray.2.0.x265-LION\[UTR\].cc.mp4
 
 const ffmpeg = spawnSync("ffmpeg", [
+  "-threads",
+  "1",
   "-y",
   "-i",
-  "test-videos/Agatha.Christie's.Poirot.S01E01.1080p.Bluray.2.0.x265-LION[UTR].mkv",
+  "test-videos/Agatha.Christie's.Poirot.S01E01.1080p.Bluray.2.0.x265-LION[UTR].mkv", // input video file
   "-c:v",
   "libx264",
   "-q:v",
@@ -62,10 +64,18 @@ const ffmpeg = spawnSync("ffmpeg", [
   "-vf",
   "scale=-2:720",
   "-preset",
-  "veryfast",
+  "veryfast", // slow is probably the most economical
   "-c:a",
   "copy",
-  "test-videos/Agatha.Christie's.Poirot.S01E01.1080p.Bluray.2.0.x265-LION[UTR].a.mp4"
+  "test-videos/Agatha.Christie's.Poirot.S01E01.1080p.Bluray.2.0.x265-LION[UTR].a.mp4" // output video file
 ]);
 
 console.log("ffmpeg", ffmpeg);
+
+// 10 Get all videos
+
+// 20 For each video
+
+// 30 Encode video
+
+// 40 Rename file from .encoding to .cc.mp4
