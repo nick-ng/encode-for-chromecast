@@ -1,0 +1,23 @@
+{
+  "name": "encode-for-chromecast",
+  "version": "1.0.0",
+  "description": "Encode videos for Chromecast automatically",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nick-ng/encode-for-chromecast.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nick-ng/encode-for-chromecast/issues"
+  },
+  "homepage": "https://github.com/nick-ng/encode-for-chromecast#readme",
+  "dependencies": {
+    "lodash": "^4.17.15"
+  }
+}
