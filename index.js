@@ -4,10 +4,9 @@ const { join } = require("path");
 const flattenDeep = require("lodash/flattenDeep");
 
 const VIDEO_EXTENSIONS = [".mp4", ".mkv", ".avi"];
-const START_PATH = "./";
+const START_PATH = "/media/usbdrive/Public/videos/Poirot";
 const DRY_RUN = true;
-
-const LOG_FILE = "./log.txt";
+const LOG_FILE = "/media/usbdrive/Public/videos/log.log";
 
 const join2 = (path1, path2) => (path1 ? join(path1, path2) : path2);
 
@@ -49,10 +48,6 @@ const getUnconvertedVideos = startDirname => {
   );
 };
 
-// console.log(spawnSync("ls", ["-l"]));
-
-console.log(getUnconvertedVideos("/home/nickng/gits/encode-for-chromecast/"));
-
 //ffmpeg -i test-videos/Agatha.Christie\'s.Poirot.S01E01.1080p.Bluray.2.0.x265-LION\[UTR\].mkv -c:v libx264 -q:v 30 -vf scale=-2:720 -c:a copy test-videos/Agatha.Christie\'s.Poirot.S01E01.1080p.Bluray.2.0.x265-LION\[UTR\].cc.mp4
 
 // const ffmpeg = spawnSync("ffmpeg", [
@@ -75,16 +70,18 @@ console.log(getUnconvertedVideos("/home/nickng/gits/encode-for-chromecast/"));
 // ]);
 
 const log = message => {
+  console.log(`${new Date()}:`, newMessage)
   fs.appendFileSync(
     LOG_FILE,
-    `${message}
+    `${new Date()}: ${message}
 `
   );
 };
 
 const encodeVideoA = pathToFile => {
-  const a = removeExtension(pathToFile);
   log(`Processing ${pathToFile}`);
+  const a = removeExtension(pathToFile);
+  log(`a`, a);
 
   // 30 Encode video
   spawnSync("ffmpeg", [
@@ -111,8 +108,6 @@ const encodeVideoA = pathToFile => {
   fs.renameSync(`${a}.encoding.mp4`, `${a}.cc.mp4`);
   log(`Renamed ${`${a}.cc.mp4`}`);
 };
-
-console.log("ffmpeg", ffmpeg);
 
 const runner = () => {
   // 10 Get all videos
