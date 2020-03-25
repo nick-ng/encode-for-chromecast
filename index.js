@@ -10,7 +10,7 @@ const LOG_FILE = "/media/usbdrive/Public/videos/log.log";
 
 const join2 = (path1, path2) => (path1 ? join(path1, path2) : path2);
 
-const removeExtension = filename => filename.replace(/\.(\w|\d)+$/);
+const removeExtension = filename => filename.replace(/\.(\w|\d)+$/, '');
 
 const isVideo = filename =>
   VIDEO_EXTENSIONS.some(extension => filename.endsWith(extension));
