@@ -81,7 +81,7 @@ const log = message => {
 const encodeVideoA = pathToFile => {
   log(`Processing ${pathToFile}`);
   const a = removeExtension(pathToFile);
-  log(`a`, a);
+  log(`a ${a}`);
 
   // 30 Encode video
   spawnSync("ffmpeg", [
