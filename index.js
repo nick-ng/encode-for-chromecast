@@ -4,6 +4,8 @@ const { join } = require("path");
 const flattenDeep = require("lodash/flattenDeep");
 
 const VIDEO_EXTENSIONS = [".mp4", ".mkv", ".avi"];
+const START_PATH = "./";
+const DRY_RUN = true;
 
 const join2 = (path1, path2) => (path1 ? join(path1, path2) : path2);
 
@@ -51,31 +53,65 @@ console.log(getUnconvertedVideos("/home/nickng/gits/encode-for-chromecast/"));
 
 //ffmpeg -i test-videos/Agatha.Christie\'s.Poirot.S01E01.1080p.Bluray.2.0.x265-LION\[UTR\].mkv -c:v libx264 -q:v 30 -vf scale=-2:720 -c:a copy test-videos/Agatha.Christie\'s.Poirot.S01E01.1080p.Bluray.2.0.x265-LION\[UTR\].cc.mp4
 
-const ffmpeg = spawnSync("ffmpeg", [
-  "-threads",
-  "1",
-  "-y",
-  "-i",
-  "test-videos/Agatha.Christie's.Poirot.S01E01.1080p.Bluray.2.0.x265-LION[UTR].mkv", // input video file
-  "-c:v",
-  "libx264",
-  "-q:v",
-  "30",
-  "-vf",
-  "scale=-2:720",
-  "-preset",
-  "veryfast", // slow is probably the most economical
-  "-c:a",
-  "copy",
-  "test-videos/Agatha.Christie's.Poirot.S01E01.1080p.Bluray.2.0.x265-LION[UTR].a.mp4" // output video file
-]);
+// const ffmpeg = spawnSync("ffmpeg", [
+//   "-threads",
+//   "1",
+//   "-y",
+//   "-i",
+//   "test-videos/Agatha.Christie's.Poirot.S01E01.1080p.Bluray.2.0.x265-LION[UTR].mkv", // input video file
+//   "-c:v",
+//   "libx264",
+//   "-q:v",
+//   "30",
+//   "-vf",
+//   "scale=-2:720",
+//   "-preset",
+//   "veryfast", // slow is probably the most economical
+//   "-c:a",
+//   "copy",
+//   "test-videos/Agatha.Christie's.Poirot.S01E01.1080p.Bluray.2.0.x265-LION[UTR].a.mp4" // output video file
+// ]);
+
+const encodeVideoA = pathToFile => {
+  const a = removeExtension(pathToFile);
+
+  // 30 Encode video
+  spawnSync("ffmpeg", [
+    "-threads",
+    "1",
+    "-y",
+    "-i",
+    pathToFile, // input video file
+    "-c:v",
+    "libx264",
+    "-q:v",
+    "30",
+    "-vf",
+    "scale=-2:720",
+    "-preset",
+    "slow", // slow is probably the most economical
+    "-c:a",
+    "copy",
+    `${a}.encoding.mp4` // output video file
+  ]);
+
+  // 40 Rename file from .encoding to .cc.mp4
+  fs.renameSync(`${a}.encoding.mp4`, `${a}.cc.mp4`);
+};
 
 console.log("ffmpeg", ffmpeg);
 
-// 10 Get all videos
+const runner = () => {
+  // 10 Get all videos
+  const unconvertedVideos = getUnconvertedVideos(START_PATH);
 
-// 20 For each video
+  if (DRY_RUN) {
+    console.log("unconvertedVideos", unconvertedVideos);
+    return;
+  }
 
-// 30 Encode video
+  // 20 For each video
+  unconvertedVideos.forEach(encodeVideoA);
+};
 
-// 40 Rename file from .encoding to .cc.mp4
+runner();
