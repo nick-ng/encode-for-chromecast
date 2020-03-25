@@ -70,7 +70,7 @@ const getUnconvertedVideos = startDirname => {
 // ]);
 
 const log = message => {
-  console.log(`${new Date()}:`, newMessage)
+  console.log(`${new Date()}:`, message);
   fs.appendFileSync(
     LOG_FILE,
     `${new Date()}: ${message}
