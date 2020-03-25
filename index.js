@@ -7,6 +7,8 @@ const VIDEO_EXTENSIONS = [".mp4", ".mkv", ".avi"];
 const START_PATH = "./";
 const DRY_RUN = true;
 
+const LOG_FILE = "./log.txt";
+
 const join2 = (path1, path2) => (path1 ? join(path1, path2) : path2);
 
 const removeExtension = filename => filename.replace(/\.(\w|\d)+$/);
@@ -72,8 +74,17 @@ console.log(getUnconvertedVideos("/home/nickng/gits/encode-for-chromecast/"));
 //   "test-videos/Agatha.Christie's.Poirot.S01E01.1080p.Bluray.2.0.x265-LION[UTR].a.mp4" // output video file
 // ]);
 
+const log = message => {
+  fs.appendFileSync(
+    LOG_FILE,
+    `${message}
+`
+  );
+};
+
 const encodeVideoA = pathToFile => {
   const a = removeExtension(pathToFile);
+  log(`Processing ${pathToFile}`);
 
   // 30 Encode video
   spawnSync("ffmpeg", [
@@ -94,9 +105,11 @@ const encodeVideoA = pathToFile => {
     "copy",
     `${a}.encoding.mp4` // output video file
   ]);
+  log(`Encoded ${a}.encoding.mp4`);
 
   // 40 Rename file from .encoding to .cc.mp4
   fs.renameSync(`${a}.encoding.mp4`, `${a}.cc.mp4`);
+  log(`Renamed ${`${a}.cc.mp4`}`);
 };
 
 console.log("ffmpeg", ffmpeg);
