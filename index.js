@@ -5,7 +5,7 @@ const flattenDeep = require("lodash/flattenDeep");
 
 const VIDEO_EXTENSIONS = [".mp4", ".mkv", ".avi"];
 const START_PATH = "/home/nickng/share/rpi/videos/Poirot/Season 01";
-const DRY_RUN = false;
+const DRY_RUN = true;
 const LOG_FILE = "./log.log";
 
 const join2 = (path1, path2) => (path1 ? join(path1, path2) : path2);
@@ -45,31 +45,10 @@ const getUnconvertedVideos = startDirname => {
   const convertedVideoNames = videos
     .filter(v => v.endsWith(".cc.mp4"))
     .map(v => v.replace(/\.cc\.mp4$/, ""));
-  return videos.filter(
-    video => !convertedVideoNames.includes(removeExtension(video))
-  );
+  return videos
+    .filter(video => !convertedVideoNames.includes(removeExtension(video)))
+    .filter(name => !name.endsWith(".cc.mp4"));
 };
-
-//ffmpeg -i test-videos/Agatha.Christie\'s.Poirot.S01E01.1080p.Bluray.2.0.x265-LION\[UTR\].mkv -c:v libx264 -q:v 30 -vf scale=-2:720 -c:a copy test-videos/Agatha.Christie\'s.Poirot.S01E01.1080p.Bluray.2.0.x265-LION\[UTR\].cc.mp4
-
-// const ffmpeg = spawnSync("ffmpeg", [
-//   "-threads",
-//   "1",
-//   "-y",
-//   "-i",
-//   "test-videos/Agatha.Christie's.Poirot.S01E01.1080p.Bluray.2.0.x265-LION[UTR].mkv", // input video file
-//   "-c:v",
-//   "libx264",
-//   "-q:v",
-//   "30",
-//   "-vf",
-//   "scale=-2:720",
-//   "-preset",
-//   "veryfast", // slow is probably the most economical
-//   "-c:a",
-//   "copy",
-//   "test-videos/Agatha.Christie's.Poirot.S01E01.1080p.Bluray.2.0.x265-LION[UTR].a.mp4" // output video file
-// ]);
 
 const log = message => {
   console.log(`${new Date()}:`, message);
