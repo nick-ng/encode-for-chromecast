@@ -1,5 +1,6 @@
 # Ignore test video files
 test-videos/*
+videos/*
 
 node_modules/*
 

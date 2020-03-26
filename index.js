@@ -4,13 +4,13 @@ const { join } = require("path");
 const flattenDeep = require("lodash/flattenDeep");
 
 const VIDEO_EXTENSIONS = [".mp4", ".mkv", ".avi"];
-const START_PATH = "/media/usbdrive/Public/videos/Poirot";
-const DRY_RUN = true;
-const LOG_FILE = "/media/usbdrive/Public/videos/log.log";
+const START_PATH = "/home/nickng/share/rpi/videos/Poirot/Season 01";
+const DRY_RUN = false;
+const LOG_FILE = "./log.log";
 
 const join2 = (path1, path2) => (path1 ? join(path1, path2) : path2);
 
-const removeExtension = filename => filename.replace(/\.(\w|\d)+$/, '');
+const removeExtension = filename => filename.replace(/\.(\w|\d)+$/, "");
 
 const isVideo = filename =>
   VIDEO_EXTENSIONS.some(extension => filename.endsWith(extension));
@@ -39,7 +39,9 @@ const getAllFiles = startDirname => {
 const getAllVideos = startDirname => getAllFiles(startDirname).filter(isVideo);
 
 const getUnconvertedVideos = startDirname => {
-  const videos = getAllVideos(startDirname);
+  const videos = getAllVideos(startDirname).filter(
+    name => !name.endsWith(".encoding.mp4")
+  );
   const convertedVideoNames = videos
     .filter(v => v.endsWith(".cc.mp4"))
     .map(v => v.replace(/\.cc\.mp4$/, ""));

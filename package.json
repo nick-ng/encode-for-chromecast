@@ -4,7 +4,8 @@
   "description": "Encode videos for Chromecast automatically",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "halp": "echo 'mount –t cifs 192.168.1.240:/share videos –o username=share'"
   },
   "repository": {
     "type": "git",
