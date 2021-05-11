@@ -19,6 +19,6 @@
   },
   "homepage": "https://github.com/nick-ng/encode-for-chromecast#readme",
   "dependencies": {
-    "lodash": "^4.17.15"
+    "lodash": "^4.17.21"
   }
 }
